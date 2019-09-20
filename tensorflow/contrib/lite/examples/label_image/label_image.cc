@@ -13,6 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include <fcntl.h>      // NOLINT(build/include_order)
+#include <getopt.h>     // NOLINT(build/include_order)
+#include <sys/time.h>   // NOLINT(build/include_order)
+#include <sys/types.h>  // NOLINT(build/include_order)
+#include <sys/uio.h>    // NOLINT(build/include_order)
+#include <unistd.h>     // NOLINT(build/include_order)
+
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -25,25 +32,18 @@ limitations under the License.
 #include <unordered_set>
 #include <vector>
 
-#include <fcntl.h>      // NOLINT(build/include_order)
-#include <getopt.h>     // NOLINT(build/include_order)
-#include <sys/time.h>   // NOLINT(build/include_order)
-#include <sys/types.h>  // NOLINT(build/include_order)
-#include <sys/uio.h>    // NOLINT(build/include_order)
-#include <unistd.h>     // NOLINT(build/include_order)
-
+#include "tensorflow/contrib/lite/examples/label_image/bitmap_helpers.h"
+#include "tensorflow/contrib/lite/examples/label_image/get_top_n.h"
 #include "tensorflow/contrib/lite/kernels/register.h"
 #include "tensorflow/contrib/lite/model.h"
 #include "tensorflow/contrib/lite/optional_debug_tools.h"
+#include "tensorflow/contrib/lite/profiling/profiler.h"
 #include "tensorflow/contrib/lite/string_util.h"
-
-#include "tensorflow/contrib/lite/examples/label_image/bitmap_helpers.h"
-#include "tensorflow/contrib/lite/examples/label_image/get_top_n.h"
 
 #define LOG(x) std::cerr
 
 namespace tflite {
-namespace label_image {
+namespace multibox_detector {
 
 double get_us(struct timeval t) { return (t.tv_sec * 1000000 + t.tv_usec); }
 
@@ -113,6 +113,7 @@ void RunInference(Settings* s) {
   }
 
   interpreter->UseNNAPI(s->accel);
+  interpreter->SetAllowFp16PrecisionForFp32(s->allow_fp16);
 
   if (s->verbose) {
     LOG(INFO) << "tensors size: " << interpreter->tensors_size() << "\n";
@@ -135,8 +136,8 @@ void RunInference(Settings* s) {
     interpreter->SetNumThreads(s->number_of_threads);
   }
 
-  int image_width = 224;
-  int image_height = 224;
+  int image_width = 299;
+  int image_height = 299;
   int image_channels = 3;
   std::vector<uint8_t> in = read_bmp(s->input_bmp_name, &image_width,
                                      &image_height, &image_channels, s);
@@ -213,22 +214,23 @@ void RunInference(Settings* s) {
     }
   }
 
-  const int output_size = 1000;
-  const size_t num_results = 5;
-  const float threshold = 0.001f;
+  //const float threshold = 0.001f;
 
-  std::vector<std::pair<float, int>> top_results;
+  //std::vector<std::pair<float, int>> top_results;
 
-  int output = interpreter->outputs()[0];
-  switch (interpreter->tensor(output)->type) {
+  //int output = interpreter->outputs()[0];
+  //TfLiteIntArray* output_dims = interpreter->tensor(output)->dims;
+  // assume output dims to be something like (1, 1, ... ,size)
+  //auto output_size = output_dims->data[output_dims->size - 1];
+  /*switch (interpreter->tensor(output)->type) {
     case kTfLiteFloat32:
       get_top_n<float>(interpreter->typed_output_tensor<float>(0), output_size,
-                       num_results, threshold, &top_results, true);
+                       s->number_of_results, threshold, &top_results, true);
       break;
     case kTfLiteUInt8:
       get_top_n<uint8_t>(interpreter->typed_output_tensor<uint8_t>(0),
-                         output_size, num_results, threshold, &top_results,
-                         false);
+                         output_size, s->number_of_results, threshold,
+                         &top_results, false);
       break;
     default:
       LOG(FATAL) << "cannot handle output type "
@@ -247,21 +249,42 @@ void RunInference(Settings* s) {
     const int index = result.second;
     LOG(INFO) << confidence << ": " << index << " " << labels[index] << "\n";
   }
+  */
+
+ string labelNames[10] = {"baked-beans","coke", "diet-coke", "fusilli-pasta", "lindt-chocolate", "mars", "penne-pasta", "pringles", "redbull", "sweetcorn"};
+
+ const float detect_threshold = 0.5; 
+
+ for (int i = 0; interpreter->typed_output_tensor<float>(2)[i] > detect_threshold; i++)
+ {
+   std::cout << i << ":" << std::left << std::setw(5) << " Item: " << std::setw(20) << labelNames[(int)interpreter->typed_output_tensor<float>(1)[i]] \
+                                      << std::setw(5) << " Score: "<< std::setw(10) << interpreter->typed_output_tensor<float>(2)[i] \
+                                      << std::setw(5) << " Box: "  << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+1] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+2] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+3] \
+                                      << std::endl;
+ }
+
+
 }
 
 void display_usage() {
-  LOG(INFO) << "label_image\n"
-            << "--accelerated, -a: [0|1], use Android NNAPI or not\n"
-            << "--count, -c: loop interpreter->Invoke() for certain times\n"
-            << "--input_mean, -b: input mean\n"
-            << "--input_std, -s: input standard deviation\n"
-            << "--image, -i: image_name.bmp\n"
-            << "--labels, -l: labels for the model\n"
-            << "--tflite_model, -m: model_name.tflite\n"
-            << "--profiling, -p: [0|1], profiling or not\n"
-            << "--threads, -t: number of threads\n"
-            << "--verbose, -v: [0|1] print more information\n"
-            << "\n";
+  LOG(INFO)
+      << "multibox_detector\n"
+      << "--accelerated, -a: [0|1], use Android NNAPI or not\n"
+      << "--allow_fp16, -f: [0|1], allow running fp32 models with fp16 not\n"
+      << "--count, -c: loop interpreter->Invoke() for certain times\n"
+      << "--input_mean, -b: input mean\n"
+      << "--input_std, -s: input standard deviation\n"
+      << "--image, -i: image_name.bmp\n"
+      << "--labels, -l: labels for the model\n"
+      << "--tflite_model, -m: model_name.tflite\n"
+      << "--profiling, -p: [0|1], profiling or not\n"
+      << "--num_results, -r: number of results to show\n"
+      << "--threads, -t: number of threads\n"
+      << "--verbose, -v: [0|1] print more information\n"
+      << "\n";
 }
 
 int Main(int argc, char** argv) {
@@ -271,6 +294,7 @@ int Main(int argc, char** argv) {
   while (1) {
     static struct option long_options[] = {
         {"accelerated", required_argument, nullptr, 'a'},
+        {"allow_fp16", required_argument, nullptr, 'f'},
         {"count", required_argument, nullptr, 'c'},
         {"verbose", required_argument, nullptr, 'v'},
         {"image", required_argument, nullptr, 'i'},
@@ -280,12 +304,13 @@ int Main(int argc, char** argv) {
         {"threads", required_argument, nullptr, 't'},
         {"input_mean", required_argument, nullptr, 'b'},
         {"input_std", required_argument, nullptr, 's'},
+        {"num_results", required_argument, nullptr, 'r'},
         {nullptr, 0, nullptr, 0}};
 
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    c = getopt_long(argc, argv, "a:b:c:f:i:l:m:p:s:t:v:", long_options,
+    c = getopt_long(argc, argv, "a:b:c:f:i:l:m:p:r:s:t:v:", long_options,
                     &option_index);
 
     /* Detect the end of the options. */
@@ -302,6 +327,10 @@ int Main(int argc, char** argv) {
         s.loop_count =
             strtol(optarg, nullptr, 10);  // NOLINT(runtime/deprecated_fn)
         break;
+      case 'f':
+        s.allow_fp16 =
+            strtol(optarg, nullptr, 10);  // NOLINT(runtime/deprecated_fn)
+        break;
       case 'i':
         s.input_bmp_name = optarg;
         break;
@@ -313,6 +342,10 @@ int Main(int argc, char** argv) {
         break;
       case 'p':
         s.profiling =
+            strtol(optarg, nullptr, 10);  // NOLINT(runtime/deprecated_fn)
+        break;
+      case 'r':
+        s.number_of_results =
             strtol(optarg, nullptr, 10);  // NOLINT(runtime/deprecated_fn)
         break;
       case 's':
@@ -339,9 +372,9 @@ int Main(int argc, char** argv) {
   return 0;
 }
 
-}  // namespace label_image
+}  // namespace multibox_detector
 }  // namespace tflite
 
 int main(int argc, char** argv) {
-  return tflite::label_image::Main(argc, argv);
+  return tflite::multibox_detector::Main(argc, argv);
 }
