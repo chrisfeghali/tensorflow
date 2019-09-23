@@ -213,7 +213,7 @@ void RunInference(Settings* s) {
     }
   }
 
-  /*const int output_size = 1000;
+  const int output_size = 1000;
   const size_t num_results = 5;
   const float threshold = 0.001f;
 
@@ -246,8 +246,8 @@ void RunInference(Settings* s) {
     const float confidence = result.first;
     const int index = result.second;
     LOG(INFO) << confidence << ": " << index << " " << labels[index] << "\n";
-  }*/
-  string labelNames[10] = {"baked-beans","coke", "diet-coke", "fusilli-pasta", "lindt-chocolate", "mars", "penne-pasta", "pringles", "redbull", "sweetcorn"};
+  }
+  /*string labelNames[10] = {"baked-beans","coke", "diet-coke", "fusilli-pasta", "lindt-chocolate", "mars", "penne-pasta", "pringles", "redbull", "sweetcorn"};
 
  const float detect_threshold = 0.5; 
 
@@ -260,7 +260,7 @@ void RunInference(Settings* s) {
                                       <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+2] \
                                       <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+3] \
                                       << std::endl;
- }
+ }*/
 
 
 
