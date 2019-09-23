@@ -250,7 +250,7 @@ void RunInference(Settings* s) {
 
 */
  string labelNames[10] = {"baked-beans","coke", "diet-coke", "fusilli-pasta", "lindt-chocolate", "mars", "penne-pasta", "pringles", "redbull", "sweetcorn"};
-
+ LOG(INFO) << "Hello this is a test \n";
  const float detect_threshold = 0.5; 
 
  for (int i = 0; interpreter->typed_output_tensor<float>(2)[i] > detect_threshold; i++)
