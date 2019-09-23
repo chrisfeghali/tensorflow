@@ -197,7 +197,7 @@ void RunInference(Settings* s) {
   }
   gettimeofday(&stop_time, nullptr);
   LOG(INFO) << "invoked \n";
-  LOG(INFO) << "average time: "
+  LOG(INFO) << "average time:  the quick brown fox jumped over the lazy dog"
             << (get_us(stop_time) - get_us(start_time)) / (s->loop_count * 1000)
             << " ms \n";
 
