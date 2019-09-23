@@ -13,7 +13,7 @@ exports_files(glob([
 ]))
 
 tf_cc_binary(
-    name = "multibox_detector",
+    name = "label_image",
     srcs = [
         "get_top_n.h",
         "get_top_n_impl.h",
@@ -61,7 +61,7 @@ cc_test(
         "multibox_detector_test.cc",
     ],
     data = [
-        "testdata/image.bmp",
+        "testdata/grace_hopper.bmp",
     ],
     tags = ["no_oss"],
     deps = [

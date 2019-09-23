@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_LABEL_IMAGE_H
-#define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_LABEL_IMAGE_H
+#ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_MULTIBOX_DETECTOR_H
+#define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_MULTIBOX_DETECTOR_H
 
 #include "tensorflow/contrib/lite/string.h"
 
@@ -30,7 +30,7 @@ struct Settings {
   float input_mean = 127.5f;
   float input_std = 127.5f;
   string model_name = "./mobilenet_quant_v1_224.tflite";
-  string input_bmp_name = "./image.bmp";
+  string input_bmp_name = "./grace_hopper.bmp";
   string labels_file_name = "./labels.txt";
   string input_layer_type = "uint8_t";
   int number_of_threads = 4;
@@ -39,4 +39,4 @@ struct Settings {
 }  // namespace multibox_detector
 }  // namespace tflite
 
-#endif  // TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_LABEL_IMAGE_H
+#endif  // TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_MULTIBOX_DETECTOR_H
