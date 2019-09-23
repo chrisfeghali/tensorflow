@@ -16,7 +16,7 @@ limitations under the License.
 #ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_H
 #define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_H
 
-#include "tensorflow/contrib/lite/examples/label_image/get_top_n_impl.h"
+#include "tensorflow/contrib/lite/examples/multibox_detector/get_top_n_impl.h"
 
 namespace tflite {
 namespace multibox_detector {

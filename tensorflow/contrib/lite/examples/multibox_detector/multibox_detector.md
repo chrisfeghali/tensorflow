@@ -1,4 +1,4 @@
-label_image for TensorFlow Lite inspired by TensorFlow's multibox_detector.
+label_image for TensorFlow Lite inspired by TensorFlow's label_image.
 
 To build label_image for Android, run $TENSORFLOW_ROOT/configure 
 and set Android NDK or configure NDK setting in 
@@ -10,12 +10,12 @@ To build it for android ARMv8:
   --crosstool_top=//external:android/crosstool \
   --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
   --cpu=arm64-v8a \
-  //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
+  //tensorflow/contrib/lite/examples/label_image:label_image
 ```
 or
 ```
 > bazel build --config android_arm64 --config monolithic --cxxopt=-std=c++11 \
-  //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
+  //tensorflow/contrib/lite/examples/label_image:label_image
 ```
 
 To build it for android arm-v7a:
@@ -24,23 +24,23 @@ To build it for android arm-v7a:
   --crosstool_top=//external:android/crosstool \
   --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
   --cpu=armeabi-v7a \
-  //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
+  //tensorflow/contrib/lite/examples/label_image:label_image
 ```
 or
 ```
 > bazel build --config android_arm --config monolithic --cxxopt=-std=c++11 \
-  //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
+  //tensorflow/contrib/lite/examples/label_image:label_image
 ```
 
 Build it for desktop machines (tested on Ubuntu and OS X)
 ```
-> bazel build --config opt --cxxopt=-std=c++11 //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
+> bazel build --config opt --cxxopt=-std=c++11 //tensorflow/contrib/lite/examples/label_image:label_image
 ```
 To run it. Prepare `./mobilenet_quant_v1_224.tflite`, `./grace_hopper.bmp`, and `./labels.txt`.
 
 Run it:
 ```
-> ./multibox_detector                                        
+> ./label_image                                        
 Loaded model ./mobilenet_quant_v1_224.tflite
 resolved reporter
 invoked
@@ -53,7 +53,7 @@ average time: 100.986 ms
 ```
 Run `interpreter->Invoker()` 100 times:
 ```
-> ./multibox_detector   -c 100                               
+> ./label_image   -c 100                               
 Loaded model ./mobilenet_quant_v1_224.tflite
 resolved reporter
 invoked
@@ -63,7 +63,7 @@ average time: 33.4694 ms
 
 Run a floating point (`mobilenet_v1_1.0_224.tflite`) model,
 ```
-> ./multibox_detector -f 1 -m mobilenet_v1_1.0_224.tflite
+> ./label_image -f 1 -m mobilenet_v1_1.0_224.tflite
 Loaded model mobilenet_v1_1.0_224.tflite
 resolved reporter
 invoked

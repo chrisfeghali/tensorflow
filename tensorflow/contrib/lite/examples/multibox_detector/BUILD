@@ -17,7 +17,7 @@ tf_cc_binary(
     srcs = [
         "get_top_n.h",
         "get_top_n_impl.h",
-        "multibox_detector.cc",
+        "label_image.cc",
     ],
     linkopts = tflite_linkopts() + select({
         "//tensorflow:android": [
@@ -40,7 +40,7 @@ cc_library(
     hdrs = [
         "bitmap_helpers.h",
         "bitmap_helpers_impl.h",
-        "multibox_detector.h",
+        "label_image.h",
     ],
     deps = [
         "//tensorflow/contrib/lite:builtin_op_data",
@@ -54,11 +54,11 @@ cc_library(
 )
 
 cc_test(
-    name = "multibox_detector_test",
+    name = "label_image_test",
     srcs = [
         "get_top_n.h",
         "get_top_n_impl.h",
-        "multibox_detector_test.cc",
+        "label_image_test.cc",
     ],
     data = [
         "testdata/grace_hopper.bmp",
