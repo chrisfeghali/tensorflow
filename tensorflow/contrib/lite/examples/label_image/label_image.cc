@@ -212,7 +212,7 @@ void RunInference(Settings* s) {
       PrintProfilingInfo(profile_events[i], op_index, registration);
     }
   }
-
+/*	
   const int output_size = 1000;
   const size_t num_results = 5;
   const float threshold = 0.001f;
@@ -247,6 +247,24 @@ void RunInference(Settings* s) {
     const int index = result.second;
     LOG(INFO) << confidence << ": " << index << " " << labels[index] << "\n";
   }
+
+*/
+ string labelNames[10] = {"baked-beans","coke", "diet-coke", "fusilli-pasta", "lindt-chocolate", "mars", "penne-pasta", "pringles", "redbull", "sweetcorn"};
+
+ const float detect_threshold = 0.5; 
+
+ for (int i = 0; interpreter->typed_output_tensor<float>(2)[i] > detect_threshold; i++)
+ {
+   std::cout << i << ":" << std::left << std::setw(5) << " Item: " << std::setw(20) << labelNames[(int)interpreter->typed_output_tensor<float>(1)[i]] \
+                                      << std::setw(5) << " Score: "<< std::setw(10) << interpreter->typed_output_tensor<float>(2)[i] \
+                                      << std::setw(5) << " Box: "  << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+1] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+2] \
+                                      <<    ","    << std::setw(10) << interpreter->typed_output_tensor<float>(0)[i*4+3] \
+                                      << std::endl;
+ }
+
+
 }
 
 void display_usage() {
