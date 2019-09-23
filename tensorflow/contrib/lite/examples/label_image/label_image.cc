@@ -112,7 +112,7 @@ void RunInference(Settings* s) {
     exit(-1);
   }
 
-  interpreter->UseNNAPI(s->accel);
+  //interpreter->UseNNAPI(s->accel);
 
   if (s->verbose) {
     LOG(INFO) << "tensors size: " << interpreter->tensors_size() << "\n";
