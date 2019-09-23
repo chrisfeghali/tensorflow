@@ -13,11 +13,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_IMPL_H_
-#define TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_IMPL_H_
+#ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_IMPL_H
+#define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_IMPL_H
 
 #include <algorithm>
-#include <functional>
 #include <queue>
 
 namespace tflite {
@@ -68,4 +67,4 @@ void get_top_n(T* prediction, int prediction_size, size_t num_results,
 }  // namespace multibox_detector
 }  // namespace tflite
 
-#endif  // TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_IMPL_H_
+#endif  // TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_IMPL_H

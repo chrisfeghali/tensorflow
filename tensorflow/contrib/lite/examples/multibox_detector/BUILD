@@ -1,17 +1,18 @@
 # Description:
-# TensorFlow Lite Multibox Detector using example label_image as a template.
+# TensorFlow Lite Example Label Image.
 
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])  # Apache 2.0
 
+load("//tensorflow:tensorflow.bzl", "tf_cc_binary")
 load("//tensorflow/contrib/lite:build_def.bzl", "tflite_linkopts")
 
 exports_files(glob([
     "testdata/*.bmp",
 ]))
 
-cc_binary(
+tf_cc_binary(
     name = "multibox_detector",
     srcs = [
         "get_top_n.h",
@@ -30,7 +31,6 @@ cc_binary(
         "//tensorflow/contrib/lite:framework",
         "//tensorflow/contrib/lite:string_util",
         "//tensorflow/contrib/lite/kernels:builtin_ops",
-        "//tensorflow/contrib/lite/profiling:profiler",
     ],
 )
 
@@ -45,6 +45,7 @@ cc_library(
     deps = [
         "//tensorflow/contrib/lite:builtin_op_data",
         "//tensorflow/contrib/lite:framework",
+        "//tensorflow/contrib/lite:schema_fbs_version",
         "//tensorflow/contrib/lite:string",
         "//tensorflow/contrib/lite:string_util",
         "//tensorflow/contrib/lite/kernels:builtin_ops",
@@ -60,8 +61,9 @@ cc_test(
         "multibox_detector_test.cc",
     ],
     data = [
-        "testdata/contrib/grace_hopper.bmp",
+        "testdata/image.bmp",
     ],
+    tags = ["no_oss"],
     deps = [
         ":bitmap_helpers",
         "@com_google_googletest//:gtest",

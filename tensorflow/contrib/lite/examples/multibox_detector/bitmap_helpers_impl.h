@@ -13,15 +13,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_BITMAP_HELPERS_IMPL_H_
-#define TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_BITMAP_HELPERS_IMPL_H_
-
-#include "tensorflow/contrib/lite/examples/multibox_detector/multibox_detector.h"
+#ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_BITMAP_HELPERS_IMPL_H_
+#define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_BITMAP_HELPERS_IMPL_H_
 
 #include "tensorflow/contrib/lite/builtin_op_data.h"
 #include "tensorflow/contrib/lite/interpreter.h"
 #include "tensorflow/contrib/lite/kernels/register.h"
 #include "tensorflow/contrib/lite/string_util.h"
+#include "tensorflow/contrib/lite/version.h"
+
+#include "tensorflow/contrib/lite/builtin_op_data.h"
+#include "tensorflow/contrib/lite/interpreter.h"
+#include "tensorflow/contrib/lite/kernels/register.h"
+#include "tensorflow/contrib/lite/string_util.h"
+#include "tensorflow/contrib/lite/version.h"
+
+#include "tensorflow/contrib/lite/examples/multibox_detector/multibox_detector.h"
 
 namespace tflite {
 namespace multibox_detector {
@@ -79,7 +86,8 @@ void resize(T* out, uint8_t* in, int image_height, int image_width,
   interpreter->Invoke();
 
   auto output = interpreter->typed_tensor<float>(2);
-  auto output_number_of_pixels = wanted_height * wanted_width * wanted_channels;
+  auto output_number_of_pixels =
+      wanted_height * wanted_height * wanted_channels;
 
   for (int i = 0; i < output_number_of_pixels; i++) {
     if (s->input_floating)
@@ -92,4 +100,4 @@ void resize(T* out, uint8_t* in, int image_height, int image_width,
 }  // namespace multibox_detector
 }  // namespace tflite
 
-#endif  // TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_BITMAP_HELPERS_IMPL_H_
+#endif  // TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_BITMAP_HELPERS_IMPL_H_

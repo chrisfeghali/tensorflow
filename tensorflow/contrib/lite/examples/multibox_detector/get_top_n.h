@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_H_
-#define TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_H_
+#ifndef TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_H
+#define TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_H
 
 #include "tensorflow/contrib/lite/examples/multibox_detector/get_top_n_impl.h"
 
@@ -35,4 +35,4 @@ template void get_top_n<float>(float*, int, size_t, float,
 }  // namespace multibox_detector
 }  // namespace tflite
 
-#endif  // TENSORFLOW_LITE_EXAMPLES_LABEL_IMAGE_GET_TOP_N_H_
+#endif  // TENSORFLOW_CONTRIB_LITE_EXAMPLES_MULTIBOX_DETECTOR_GET_TOP_N_H

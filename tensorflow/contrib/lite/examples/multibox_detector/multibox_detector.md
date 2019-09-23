@@ -1,6 +1,6 @@
-multibox_detector for TensorFlow Lite inspired by Tflite's label_image.
+label_image for TensorFlow Lite inspired by TensorFlow's multibox_detector.
 
-To build multibox_detector for Android, run $TENSORFLOW_ROOT/configure 
+To build label_image for Android, run $TENSORFLOW_ROOT/configure 
 and set Android NDK or configure NDK setting in 
 $TENSORFLOW_ROOT/WORKSPACE first.
  
@@ -34,13 +34,13 @@ or
 
 Build it for desktop machines (tested on Ubuntu and OS X)
 ```
-> bazel build --config opt --cxxopt=-std=c++11 //tensorflow/lite/examples/multibox_detector:multibox_detector
+> bazel build --config opt --cxxopt=-std=c++11 //tensorflow/contrib/lite/examples/multibox_detector:multibox_detector
 ```
 To run it. Prepare `./mobilenet_quant_v1_224.tflite`, `./grace_hopper.bmp`, and `./labels.txt`.
-Note: These files are still from label_image, choose appropriate files for multibox detection (.tflite for multibox, bmp containing items that you want to detect, labels are in the main multibox_detector.cc code for now)
+
 Run it:
 ```
-> ./multibox_detector
+> ./multibox_detector                                        
 Loaded model ./mobilenet_quant_v1_224.tflite
 resolved reporter
 invoked
@@ -51,9 +51,9 @@ average time: 100.986 ms
 0.0235294: 514 cornet
 0.0196078: 835 suit
 ```
-Run `interpreter->Invoke()` 100 times:
+Run `interpreter->Invoker()` 100 times:
 ```
-> ./multibox_detector   -c 100
+> ./multibox_detector   -c 100                               
 Loaded model ./mobilenet_quant_v1_224.tflite
 resolved reporter
 invoked

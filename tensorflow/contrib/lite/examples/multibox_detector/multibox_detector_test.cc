@@ -16,12 +16,14 @@ limitations under the License.
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "tensorflow/contrib/lite/examples/label_image/bitmap_helpers.h"
-#include "tensorflow/contrib/lite/examples/label_image/get_top_n.h"
-#include "tensorflow/contrib/lite/examples/label_image/label_image.h"
+#include "tensorflow/contrib/lite/examples/multibox_detector/bitmap_helpers.h"
+#include "tensorflow/contrib/lite/examples/multibox_detector/get_top_n.h"
+#include "tensorflow/contrib/lite/examples/multibox_detector/multibox_detector.h"
+
+using ::testing::ElementsAreArray;
 
 namespace tflite {
-namespace label_image {
+namespace multibox_detector {
 
 TEST(LabelImageTest, GraceHopper) {
   std::string lena_file =
@@ -50,7 +52,7 @@ TEST(LabelImageTest, GetTopN) {
   ASSERT_EQ(top_results[0].second, 8);
 }
 
-}  // namespace label_image
+}  // namespace multibox_detector
 }  // namespace tflite
 
 int main(int argc, char **argv) {
